@@ -1,0 +1,17 @@
+import './Navbar.css';
+
+function Navbar() {
+    return (
+        <>
+            <nav className='navbar'>
+                <h2>My App</h2>
+                <ul>
+                    <li>Home</li>
+                    <li>About</li>
+                </ul>
+            </nav>
+        </>
+    );
+}
+
+export default Navbar;
