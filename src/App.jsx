@@ -6,6 +6,7 @@ import './App.css'
 import Navbar from './components/Navbar';
 import Card from './components/Card';
 import Counter from './components/Counter';
+import RegisterForm from './components/RegisterForm';
 
 function App() {
 
@@ -18,6 +19,9 @@ function App() {
           <Card title="Product 1" description="This is cool" />
           <Card title="Product 2" description="This is better" />
           <Card title="Product 3" description="This is the Best!" />
+        </div>
+        <div className='container'>
+          <RegisterForm />
         </div>
       </div> 
       <footer className="app-footer">
