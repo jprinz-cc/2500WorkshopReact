@@ -8,3 +8,10 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.app-footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-top: 1pm solid #444
+}
