@@ -40,6 +40,28 @@ function RegisterForm() {
         }));
     }
 
+    const fetchSecureUsers = async (token) => {
+        try {
+            setIsLoading(true);
+            const response = await fetch('https://workshopapp.onrender.com/users', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+            if(response.ok){
+                setUserList(data);
+            }
+
+        } catch (err) {
+            setMessage('Failed to load users.');
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.PreventDefault();
 
@@ -47,7 +69,7 @@ function RegisterForm() {
         
         try {
             setIsLoading(true);
-            const response = await fetch(`https://workshopapp.onrender.com`, {
+            const response = await fetch(`https://workshopapp.onrender.com${endpoint}`, {
                 method: 'POST',
                 header: { 'Content-Type' : 'application/json'},
                 body: JSON.stringify({
@@ -72,15 +94,30 @@ function RegisterForm() {
         } finally {
             setIsLoading(false);
         }
-
-
     };
+
+    if (isLoading) return <p>Loading...</p>;
+
+    if(userList.length > 0) {
+        return (
+            <div className='register-container' style={{maxWidth: '800px'}}>
+                <h2>Secure User Dashboard</h2>
+                <div style={{display: flex, gap: '1rem', flexWrap: 'wrap', justifyContent: 'center'}}>
+                   {userList.map((user) =>(
+                    <Card key={user.id} title={user.name} description={user.email} />
+                   ))} 
+                </div>
+            </div>
+        );
+    }
+
+
 
     return (
         <>
         <div className="register-container">
             <h2>{isLoginMode ? 'Login Here' : 'Register Here'}</h2>
-            <form className='register-form'>
+            <form onSubmit={handleSubmit} className='register-form'>
                 <input
                     name="username"
                     value={formData.username}
@@ -102,6 +139,7 @@ function RegisterForm() {
                     placeholder='Password'
                     className='register-input'
                 />
+                <button type='submit'>Submit</button>
             </form>
             <p className='live-preview' style={{color: message === 'Password looks good!' ? 
                 'lightgreen' : '#ff6b6b'}}>
