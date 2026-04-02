@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './RegisterForm.css';
+import Card from './Card';
 
 function RegisterForm() {
 
@@ -10,6 +11,10 @@ function RegisterForm() {
     });
 
     const [message, setMessage] = useState('');
+
+    const [isLoginMode, setIsLoginMode] = useState(false);
+    const [userList, setUserList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -38,7 +43,7 @@ function RegisterForm() {
     return (
         <>
         <div className="register-container">
-            <h2>Register Here</h2>
+            <h2>{isLoginMode ? 'Login Here' : 'Register Here'}</h2>
             <form className='register-form'>
                 <input
                     name="username"
