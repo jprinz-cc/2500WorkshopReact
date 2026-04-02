@@ -40,6 +40,42 @@ function RegisterForm() {
         }));
     }
 
+    const handleSubmit = async (e) => {
+        e.PreventDefault();
+
+        const endpoint = isLoginMode ? '/users/login' : '/users'; 
+        
+        try {
+            setIsLoading(true);
+            const response = await fetch(`https://workshopapp.onrender.com`, {
+                method: 'POST',
+                header: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({
+                    name: formData.userName,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+
+            const data = await response.json();
+
+            if(!response.ok) throw new Error(data.error);
+
+            if(isLoginMode) {
+                setMessage('Login Successful! Fetching users...');
+                fetchSecureUsers(data.token);
+            } else {
+                setMessage('Registered! Please switch to Login');
+            }
+        } catch (err) {
+            setMessage(`Error: ${err.message}`);
+        } finally {
+            setIsLoading(false);
+        }
+
+
+    };
+
     return (
         <>
         <div className="register-container">
@@ -72,6 +108,9 @@ function RegisterForm() {
                 {message}
             </p>
             <p className='live-preview'>Live Preview: {formData.username}</p>
+            <button type='button' onClick={() => setIsLoginMode(!isLoginMode)}>
+                Switch to {isLoginMode ? 'Register' : 'Login'}
+            </button>
         </div>
         </>
     );
