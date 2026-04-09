@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import './RegisterForm.css';
 import Card from './Card';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterForm() {
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(false);    
 
     const [formData, setFormData] = useState({
         username: '',
@@ -11,8 +15,7 @@ function RegisterForm() {
     });
 
     const [isLoginMode, setIsLoginMode] = useState(false); // Toggles Register vs Login
-    const [userList, setUserList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -65,8 +68,9 @@ function RegisterForm() {
             if (!response.ok) throw new Error(data.error);
 
             if (isLoginMode) {
-                setMessage('Login Successful! Fetching users...');
-                fetchSecureUsers(data.token); // Pass the JWT to our next function!
+                console.log("Here!!");
+                localStorage.setItem('token', data.token);
+                navigate('/dashboard');
             } else {
                 setMessage('Registered! Please switch to Login.');
             }
@@ -77,40 +81,11 @@ function RegisterForm() {
         }
     };
 
-    const fetchSecureUsers = async (token) => {
-        try {
-            setIsLoading(true);
-            const response = await fetch('https://workshopapp.onrender.com/users', {
-                method: 'GET',
-                headers: { 
-                    'Authorization': `Bearer ${token}` // Present the JWT Bouncer pass!
-                }
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setUserList(data); // Save the users to state!
-            }
-        } catch {
-            setMessage('Failed to load users.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    
 
     if (isLoading) return <p>Loading...</p>;
 
-    if (userList.length > 0) {
-      return (
-          <div className="register-container" style={{ maxWidth: '800px' }}>
-              <h2>Secure User Dashboard</h2>
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                  {userList.map((user) => (
-                      <Card key={user.id} title={user.name} description={user.email} />
-                  ))}
-              </div>
-          </div>
-      );
-  }
+    
     
   return (
     <>
