@@ -44,7 +44,7 @@ function Dashboard() {
             <h2>Secure User Dashboard</h2>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {userList.map((user) => (
-                    <Card key={user.id} title={user.name} description={user.email} />
+                    <Card key={user.email} title={user.name} description={user.email} />
                 ))}
             </div>
         </div>
